@@ -31,7 +31,7 @@ public actor PlanetscaleClient {
         ))
 
         // Decode the session
-        let response = try await res.decode(ExecuteResponse.self)
+        let response: ExecuteResponse = try await res.decode()
 
         // Save the session
         self.session = response.session
@@ -76,7 +76,7 @@ public actor PlanetscaleClient {
         ))
 
         // Decode the session
-        let data = try await res.decode(QuerySession.self)
+        let data: QuerySession = try await res.decode()
 
         // Save the session
         self.session = data.session
@@ -124,6 +124,12 @@ extension PlanetscaleClient {
 }
 
 extension PlanetscaleClient.QueryResult {
+
+    public func decode<T: Decodable>() throws -> [T] {
+        let values = decode()
+        let data = try JSONSerialization.data(withJSONObject: values)
+        return try JSONDecoder().decode([T].self, from: data)
+    }
 
     public func decode() -> [[String: Any]] {
         guard let rows = rows else {
