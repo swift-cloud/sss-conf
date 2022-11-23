@@ -20,8 +20,11 @@ public actor PlanetscaleClient {
         // Request a new session
         let res = try await fetch("\(baseURL)/psdb.v1alpha1.Database/CreateSession", .options(
             method: .post,
-            body: .json([:]),
-            headers: [HTTPHeader.authorization.rawValue: basicAuthorizationHeader()]
+            body: .text("{}"),
+            headers: [
+                HTTPHeader.authorization.rawValue: basicAuthorizationHeader(),
+                HTTPHeader.contentType.rawValue: "application/json"
+            ]
         ))
 
         // Decode the session
@@ -36,6 +39,13 @@ public actor PlanetscaleClient {
     private func basicAuthorizationHeader() -> String {
         let value = Data("\(username):\(password)".utf8).base64EncodedString()
         return "Basic \(value)"
+    }
+}
+
+extension PlanetscaleClient {
+    public struct VitessError: Codable, Error {
+        public let message: String
+        public let code: String
     }
 }
 
