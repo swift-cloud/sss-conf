@@ -9,7 +9,7 @@ public actor PlanetscaleClient {
 
     private let password: String
 
-    public private(set) var session: QuerySession?
+    public private(set) var session: QuerySession.Session?
 
     public init(username: String, password: String) {
         self.username = username
@@ -53,12 +53,12 @@ public actor PlanetscaleClient {
         ))
 
         // Decode the session
-        let session = try await res.decode(QuerySession.self)
+        let data = try await res.decode(QuerySession.self)
 
         // Save the session
-        self.session = session
+        self.session = data.session
 
-        return session
+        return data
     }
 
     private func basicAuthorizationHeader() -> String {
@@ -69,13 +69,13 @@ public actor PlanetscaleClient {
 
 extension PlanetscaleClient {
     public struct ExecuteResponse: Codable {
-        public let session: QuerySession
+        public let session: QuerySession.Session?
         public let error: VitessError?
     }
 
     public struct ExecuteRequest: Codable {
         public let query: String
-        public let session: QuerySession?
+        public let session: QuerySession.Session?
     }
 }
 
@@ -102,6 +102,8 @@ extension PlanetscaleClient {
                 }
 
                 public let autocommit: Bool
+                public let foundRows: String?
+                public let rowCount: String?
                 public let options: Options
                 public let DDLStrategy: String
                 public let SessionUUID: String
