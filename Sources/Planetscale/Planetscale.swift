@@ -19,7 +19,7 @@ public actor PlanetscaleClient {
     }
 
     @discardableResult
-    public func execute(query: String) async throws -> QueryResult {
+    public func execute(query: String, cachePolicy: CachePolicy = .origin) async throws -> QueryResult {
         // Request a new session
         let res = try await fetch("\(baseURL)/Execute", .options(
             method: .post,
@@ -27,7 +27,8 @@ public actor PlanetscaleClient {
             headers: [
                 HTTPHeader.authorization.rawValue: basicAuthorizationHeader,
                 HTTPHeader.contentType.rawValue: "application/json"
-            ]
+            ],
+            cachePolicy: cachePolicy
         ))
 
         // Decode the session
@@ -126,12 +127,12 @@ extension PlanetscaleClient {
 extension PlanetscaleClient.QueryResult {
 
     public func decode<T: Decodable>() throws -> [T] {
-        let values = decode()
+        let values = json()
         let data = try JSONSerialization.data(withJSONObject: values)
         return try JSONDecoder().decode([T].self, from: data)
     }
 
-    public func decode() -> [[String: Any]] {
+    public func json() -> [[String: Any]] {
         guard let rows = rows else {
             return []
         }

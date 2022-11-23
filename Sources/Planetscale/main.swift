@@ -15,7 +15,7 @@ router.get("/execute") { req, res in
     let sql = req.searchParams["sql"] ?? ""
     let client = try buildPlanetscaleClient()
     let data = try await client.execute(query: sql)
-    try await res.status(.ok).send(data.decode())
+    try await res.status(.ok).send(data.json())
 }
 
 router.get("/session") { req, res in
