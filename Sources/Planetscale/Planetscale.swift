@@ -16,6 +16,7 @@ public actor PlanetscaleClient {
         self.password = password
     }
 
+    @discardableResult
     public func execute(query: String) async throws -> ExecuteResponse {
         // Request a new session
         let res = try await fetch("\(baseURL)/Execute", .options(
@@ -39,6 +40,26 @@ public actor PlanetscaleClient {
         }
 
         return response
+    }
+
+    @discardableResult
+    public func transaction<T: Decodable>(_ fn: (PlanetscaleClient) async throws -> T) async throws -> T {
+        // Create a new client for the transaction
+        let tx = PlanetscaleClient(username: username, password: password)
+        do {
+            // Begin the transaction
+            try await tx.execute(query: "BEGIN")
+            // Execute the transaction
+            let res = try await fn(tx)
+            // Commit the transaction
+            try await tx.execute(query: "COMMIT")
+            return res
+        } catch {
+            // Rollback transaction on error
+            try await tx.execute(query: "ROLLBACK")
+            // Rethrow error
+            throw error
+        }
     }
 
     public func refresh() async throws -> QuerySession {
@@ -69,13 +90,34 @@ public actor PlanetscaleClient {
 
 extension PlanetscaleClient {
     public struct ExecuteResponse: Codable {
-        public let session: QuerySession.Session?
+        public let session: QuerySession.Session
+        public let result: QueryResult?
         public let error: VitessError?
     }
 
     public struct ExecuteRequest: Codable {
         public let query: String
         public let session: QuerySession.Session?
+    }
+}
+
+extension PlanetscaleClient {
+    public struct QueryResult: Codable {
+        public struct Row: Codable {
+            public let lengths: [String]
+            public let values: String?
+        }
+
+        public struct Field: Codable {
+            public let name: String
+            public let type: String
+            public let table: String?
+        }
+
+        public let rowsAffected: String?
+        public let insertId: String?
+        public let fields: [Field]?
+        public let rows: [Row]?
     }
 }
 
