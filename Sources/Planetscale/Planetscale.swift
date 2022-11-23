@@ -16,11 +16,11 @@ public actor PlanetscaleClient {
         self.password = password
     }
 
-    public func execute(sql: String) async throws -> ExecuteResponse {
+    public func execute(query: String) async throws -> ExecuteResponse {
         // Request a new session
         let res = try await fetch("\(baseURL)/Execute", .options(
             method: .post,
-            body: .json(ExecuteRequest(sql: sql, session: session)),
+            body: .json(ExecuteRequest(query: query, session: session)),
             headers: [
                 HTTPHeader.authorization.rawValue: basicAuthorizationHeader(),
                 HTTPHeader.contentType.rawValue: "application/json"
@@ -30,13 +30,13 @@ public actor PlanetscaleClient {
         // Decode the session
         let response = try await res.decode(ExecuteResponse.self)
 
+        // Save the session
+        self.session = response.session
+
         // Check for an error
         if let error = response.error {
             throw error
         }
-
-        // Save the session
-        self.session = response.session
 
         return response
     }
@@ -74,7 +74,7 @@ extension PlanetscaleClient {
     }
 
     public struct ExecuteRequest: Codable {
-        public let sql: String
+        public let query: String
         public let session: QuerySession?
     }
 }
