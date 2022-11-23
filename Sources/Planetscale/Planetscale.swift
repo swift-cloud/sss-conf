@@ -28,12 +28,12 @@ public actor PlanetscaleClient {
         ))
 
         // Decode the session
-        let data = try await res.decode(QuerySessionResponse.self)
+        let session = try await res.decode(QuerySession.self)
 
         // Save the session
-        self.session = data.session
+        self.session = session
 
-        return data.session
+        return session
     }
 
     private func basicAuthorizationHeader() -> String {
@@ -78,9 +78,5 @@ extension PlanetscaleClient {
         public let branch: String
         public let user: User
         public let session: Session
-    }
-
-    public struct QuerySessionResponse: Codable {
-        public let session: QuerySession
     }
 }

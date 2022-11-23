@@ -15,7 +15,10 @@ router.get("/session") { req, res in
 
 func buildPlanetscaleClient() throws -> PlanetscaleClient {
     let dict = try Dictionary(name: "env")
-    return PlanetscaleClient(username: dict["DB_USERNAME"]!, password: dict["DB_PASSWORD"]!)
+    return PlanetscaleClient(
+        username: dict["DB_USERNAME"]!,
+        password: dict["DB_PASSWORD"]!
+    )
 }
 
 try await router.listen()
