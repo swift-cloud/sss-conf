@@ -9,6 +9,8 @@ public actor PlanetscaleClient {
 
     private let password: String
 
+    private lazy var basicAuthorizationHeader = buildBasicAuthorizationHeader()
+
     public private(set) var session: QuerySession.Session?
 
     public init(username: String, password: String) {
@@ -17,13 +19,13 @@ public actor PlanetscaleClient {
     }
 
     @discardableResult
-    public func execute(query: String) async throws -> ExecuteResponse {
+    public func execute(query: String) async throws -> QueryResult {
         // Request a new session
         let res = try await fetch("\(baseURL)/Execute", .options(
             method: .post,
             body: .json(ExecuteRequest(query: query, session: session)),
             headers: [
-                HTTPHeader.authorization.rawValue: basicAuthorizationHeader(),
+                HTTPHeader.authorization.rawValue: basicAuthorizationHeader,
                 HTTPHeader.contentType.rawValue: "application/json"
             ]
         ))
@@ -39,7 +41,7 @@ public actor PlanetscaleClient {
             throw error
         }
 
-        return response
+        return response.result!
     }
 
     @discardableResult
@@ -68,7 +70,7 @@ public actor PlanetscaleClient {
             method: .post,
             body: .text("{}"),
             headers: [
-                HTTPHeader.authorization.rawValue: basicAuthorizationHeader(),
+                HTTPHeader.authorization.rawValue: basicAuthorizationHeader,
                 HTTPHeader.contentType.rawValue: "application/json"
             ]
         ))
@@ -82,8 +84,8 @@ public actor PlanetscaleClient {
         return data
     }
 
-    private func basicAuthorizationHeader() -> String {
-        let value = Data("\(username):\(password)".utf8).base64EncodedString()
+    private func buildBasicAuthorizationHeader() -> String {
+        let value = "\(username):\(password)".base64Encoded()
         return "Basic \(value)"
     }
 }
@@ -118,6 +120,79 @@ extension PlanetscaleClient {
         public let insertId: String?
         public let fields: [Field]?
         public let rows: [Row]?
+    }
+}
+
+extension PlanetscaleClient.QueryResult {
+
+    public func decode() -> [[String: Any]] {
+        guard let rows = rows else {
+            return []
+        }
+        return rows.map { row in
+            var dict: [String: Any] = [:]
+            for (index, field) in (fields ?? []).enumerated() {
+                dict[field.name] = field.cast(value: row.decode()[index])
+            }
+            return dict
+        }
+    }
+}
+
+extension PlanetscaleClient.QueryResult.Row {
+
+    public func decode() -> [String?] {
+        let data = values?.base64Decoded() ?? ""
+        var offset = 0
+        return lengths.map { size in
+            let width = Int(size)!
+            guard width >= 0 else {
+                return nil
+            }
+            let value = String(data.dropFirst(offset).prefix(width))
+            offset += width
+            return value
+        }
+    }
+}
+
+extension PlanetscaleClient.QueryResult.Field {
+
+    public func cast(value: String?) -> Any? {
+        guard let value = value else {
+            return nil
+        }
+        switch type {
+            case "INT8",
+                 "INT16",
+                 "INT24",
+                 "INT32",
+                 "UINT8",
+                 "UINT16",
+                 "UINT24",
+                 "UINT32",
+                 "YEAR":
+                return Int(value)!
+            case "DECIMAL",
+                "FLOAT32",
+                 "FLOAT64":
+                return Double(value)!
+            case "INT64",
+                 "UINT64",
+                 "DATE",
+                 "TIME",
+                 "DATETIME",
+                 "TIMESTAMP",
+                 "BLOB",
+                 "BIT",
+                 "VARBINARY",
+                 "BINARY":
+                return value
+            case "JSON":
+                return value
+            default:
+                return value
+        }
     }
 }
 
@@ -159,5 +234,17 @@ extension PlanetscaleClient {
         public let branch: String
         public let user: User
         public let session: Session
+    }
+}
+
+extension String {
+
+    func base64Encoded() -> String {
+        return Data(self.utf8).base64EncodedString()
+    }
+
+    func base64Decoded() -> String? {
+        guard let data = Data(base64Encoded: self) else { return nil }
+        return String(data: data, encoding: .utf8)
     }
 }
