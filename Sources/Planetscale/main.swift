@@ -13,8 +13,9 @@ router.get("/") { req, res in
 
 router.get("/execute") { req, res in
     let sql = req.searchParams["sql"] ?? ""
+    let ttl = req.searchParams["ttl"]
     let client = try buildPlanetscaleClient()
-    let data = try await client.execute(query: sql)
+    let data = try await client.execute(query: sql, cachePolicy: ttl != nil ? .ttl(.init(ttl!)!) : nil)
     try await res.status(.ok).send(data.json())
 }
 

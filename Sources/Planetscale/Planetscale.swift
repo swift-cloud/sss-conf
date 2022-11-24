@@ -19,7 +19,7 @@ public actor PlanetscaleClient {
     }
 
     @discardableResult
-    public func execute(query: String, cachePolicy: CachePolicy = .origin) async throws -> QueryResult {
+    public func execute(query: String, cachePolicy: CachePolicy? = nil) async throws -> QueryResult {
         // Request a new session
         let res = try await fetch("\(baseURL)/Execute", .options(
             method: .post,
@@ -28,7 +28,8 @@ public actor PlanetscaleClient {
                 HTTPHeader.authorization.rawValue: basicAuthorizationHeader,
                 HTTPHeader.contentType.rawValue: "application/json"
             ],
-            cachePolicy: cachePolicy
+            cachePolicy: cachePolicy ?? .origin,
+            cacheKey: cachePolicy != nil ? query : nil
         ))
 
         // Decode the session
@@ -181,7 +182,7 @@ extension PlanetscaleClient.QueryResult.Field {
                  "YEAR":
                 return Int(value)!
             case "DECIMAL",
-                "FLOAT32",
+                 "FLOAT32",
                  "FLOAT64":
                 return Double(value)!
             case "INT64",
