@@ -19,17 +19,15 @@ public actor PlanetscaleClient {
     }
 
     @discardableResult
-    public func execute(query: String, cachePolicy: CachePolicy? = nil) async throws -> QueryResult {
+    public func execute(query: String) async throws -> QueryResult {
+        // Build request
+        let req = ExecuteRequest(query: query, session: session)
+
         // Request a new session
         let res = try await fetch("\(baseURL)/Execute", .options(
             method: .post,
-            body: .json(ExecuteRequest(query: query, session: session)),
-            headers: [
-                HTTPHeader.authorization.rawValue: basicAuthorizationHeader,
-                HTTPHeader.contentType.rawValue: "application/json"
-            ],
-            cachePolicy: cachePolicy ?? .origin,
-            cacheKey: cachePolicy != nil ? query : nil
+            body: .json(req),
+            headers: [HTTPHeader.authorization.rawValue: basicAuthorizationHeader]
         ))
 
         // Decode the session
@@ -70,11 +68,8 @@ public actor PlanetscaleClient {
         // Request a new session
         let res = try await fetch("\(baseURL)/CreateSession", .options(
             method: .post,
-            body: .text("{}"),
-            headers: [
-                HTTPHeader.authorization.rawValue: basicAuthorizationHeader,
-                HTTPHeader.contentType.rawValue: "application/json"
-            ]
+            body: .json([:]),
+            headers: [HTTPHeader.authorization.rawValue: basicAuthorizationHeader]
         ))
 
         // Decode the session
@@ -137,12 +132,13 @@ extension PlanetscaleClient.QueryResult {
         guard let rows = rows else {
             return []
         }
+        guard let fields = fields else {
+            return rows.map { _ in [:] }
+        }
         return rows.map { row in
-            var dict: [String: Any] = [:]
-            for (index, field) in (fields ?? []).enumerated() {
-                dict[field.name] = field.cast(value: row.decode()[index])
+            return fields.enumerated().reduce(into: [:]) { dict, item in
+                dict[item.element.name] = item.element.cast(value: row.decode()[item.offset])
             }
-            return dict
         }
     }
 }
