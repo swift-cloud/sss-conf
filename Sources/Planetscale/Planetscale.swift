@@ -3,6 +3,8 @@ import Foundation
 
 private let baseURL = "https://aws.connect.psdb.cloud/psdb.v1alpha1.Database"
 
+private let proxyURL = "https://planetscale-connect.app.swift.cloud/psdb.v1alpha1.Database"
+
 public actor PlanetscaleClient {
 
     private let username: String
@@ -19,7 +21,32 @@ public actor PlanetscaleClient {
     }
 
     @discardableResult
-    public func execute(query: String) async throws -> QueryResult {
+    public func query(_ query: String, cachePolicy: CachePolicy? = nil) async throws -> QueryResult {
+        // Request a new session
+        let res = try await fetch("\(proxyURL)/Execute", .options(
+            method: .get,
+            headers: [HTTPHeader.authorization.rawValue: basicAuthorizationHeader],
+            searchParams: ["query": query],
+            cachePolicy: cachePolicy ?? .origin,
+            cacheKey: cachePolicy == nil ? nil : "\(username).\(query)"
+        ))
+
+        // Decode the session
+        let response: ExecuteResponse = try await res.decode()
+
+        // Save the session
+        self.session = response.session
+
+        // Check for an error
+        if let error = response.error {
+            throw error
+        }
+
+        return response.result!
+    }
+
+    @discardableResult
+    public func execute(_ query: String) async throws -> QueryResult {
         // Build request
         let req = ExecuteRequest(query: query, session: session)
 
@@ -50,15 +77,15 @@ public actor PlanetscaleClient {
         let tx = PlanetscaleClient(username: username, password: password)
         do {
             // Begin the transaction
-            try await tx.execute(query: "BEGIN")
+            try await tx.execute("BEGIN")
             // Execute the transaction
             let res = try await fn(tx)
             // Commit the transaction
-            try await tx.execute(query: "COMMIT")
+            try await tx.execute("COMMIT")
             return res
         } catch {
             // Rollback transaction on error
-            try await tx.execute(query: "ROLLBACK")
+            try await tx.execute("ROLLBACK")
             // Rethrow error
             throw error
         }
