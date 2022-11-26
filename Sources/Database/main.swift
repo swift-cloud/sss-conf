@@ -1,6 +1,8 @@
 import Compute
 import Planetscale
 
+let client = try buildPlanetscaleClient()
+
 let router = Router()
 
 router.use { _, res in
@@ -13,7 +15,6 @@ router.get("/") { req, res in
 
 router.get("/execute") { req, res in
     let sql = req.searchParams["sql"] ?? ""
-    let client = try buildPlanetscaleClient()
     let data = try await client.execute(sql)
     try await res.status(.ok).send(data.json())
 }
