@@ -5,14 +5,15 @@ import PackageDescription
 let package = Package(
     name: "sss-conf",
     platforms: [
-        .macOS(.v12)
+        .macOS(.v13)
     ],
     dependencies: [
-        .package(url: "https://github.com/AndrewBarba/Compute", branch: "ab/fetch-urlsession")
+        .package(url: "https://github.com/swift-cloud/Compute", from: "1.10.0"),
+        .package(url: "https://github.com/swift-cloud/Planetscale", from: "1.0.0")
     ],
     targets: [
         .executableTarget(name: "Hello", dependencies: ["Compute"]),
-        .executableTarget(name: "Planetscale", dependencies: ["Compute"])
+        .executableTarget(name: "Database", dependencies: ["Compute", "Planetscale"])
     ]
 )
 

@@ -1,5 +1,5 @@
 import Compute
-import Foundation
+import Planetscale
 
 let router = Router()
 
@@ -13,9 +13,8 @@ router.get("/") { req, res in
 
 router.get("/execute") { req, res in
     let sql = req.searchParams["sql"] ?? ""
-    let ttl = req.searchParams["ttl"]
     let client = try buildPlanetscaleClient()
-    let data = try await client.query(sql, cachePolicy: ttl == nil ? nil : .ttl(Int(ttl!)!))
+    let data = try await client.execute(sql)
     try await res.status(.ok).send(data.json())
 }
 
@@ -27,10 +26,9 @@ router.get("/session") { req, res in
 
 func buildPlanetscaleClient() throws -> PlanetscaleClient {
     let dict = try Dictionary(name: "env")
-    return PlanetscaleClient(
-        username: dict["DB_USERNAME"]!,
-        password: dict["DB_PASSWORD"]!
-    )
+    let username = dict["DB_USERNAME"]!
+    let password = dict["DB_PASSWORD"]!
+    return PlanetscaleClient(username: username, password: password)
 }
 
 try await router.listen()
