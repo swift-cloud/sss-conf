@@ -27,8 +27,8 @@ public actor PlanetscaleClient {
             method: .get,
             headers: [HTTPHeader.authorization.rawValue: basicAuthorizationHeader],
             searchParams: ["query": query],
-            cachePolicy: cachePolicy ?? .origin
-//            cacheKey: cachePolicy == nil ? nil : "\(username).\(query)"
+            cachePolicy: cachePolicy ?? .origin,
+            cacheKey: cachePolicy == nil ? nil : "\(username).\(query)"
         ))
 
         // Decode the session
