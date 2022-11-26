@@ -8,7 +8,7 @@ let package = Package(
         .macOS(.v12)
     ],
     dependencies: [
-        .package(url: "https://github.com/AndrewBarba/Compute", branch: "main")
+        .package(url: "https://github.com/AndrewBarba/Compute", branch: "ab/fetch-urlsession")
     ],
     targets: [
         .executableTarget(name: "Hello", dependencies: ["Compute"]),

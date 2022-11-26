@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/AndrewBarba/Compute",
       "state" : {
-        "branch" : "main",
-        "revision" : "67a05d5003b2d03fc25b09fdfccb9f22b5123b64"
+        "branch" : "ab/fetch-urlsession",
+        "revision" : "e5f74885b53f3a22094aac66d6bd430a03320ebd"
       }
     },
     {
