@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/swift-cloud/Compute",
       "state" : {
-        "revision" : "1b8323caa0e44c87e426b3f414742ea3ab5ce343",
-        "version" : "1.11.0"
+        "revision" : "4a711919bb69f548816256d12e4f77f564ab7539",
+        "version" : "2.0.0"
       }
     },
     {
@@ -23,8 +23,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/swift-cloud/Planetscale",
       "state" : {
-        "revision" : "e24b127c4bec53e51403fc8eecd223d6352afdb9",
-        "version" : "1.0.0"
+        "revision" : "e6d951923964d1466c69d95ec8feeac0141e20d7",
+        "version" : "1.1.0"
       }
     }
   ],
