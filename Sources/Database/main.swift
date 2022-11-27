@@ -1,4 +1,5 @@
 import Compute
+import Foundation
 import Planetscale
 
 let client = try buildPlanetscaleClient()
@@ -23,6 +24,11 @@ router.get("/session") { req, res in
     let client = try buildPlanetscaleClient()
     let session = try await client.refresh()
     try await res.status(.ok).send(session)
+}
+
+router.get("/token") { req, res in
+    let jwt = try JWT(claims: ["user_id": UUID().uuidString], secret: UUID().uuidString)
+    try await res.status(200).send(["token": jwt.token])
 }
 
 func buildPlanetscaleClient() throws -> PlanetscaleClient {
