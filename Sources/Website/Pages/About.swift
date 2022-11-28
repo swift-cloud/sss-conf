@@ -3,6 +3,8 @@ import TokamakStaticHTML
 
 struct AboutPage: View {
 
+    @Environment(\.request) var req
+
     let homeURL = URL(string: "/")!
 
     var body: some View {
@@ -17,6 +19,10 @@ struct AboutPage: View {
                 Link("Home", destination: homeURL)
                     .font(.body)
                     .foregroundColor(.blue)
+                Spacer().frame(height: 20)
+                Text("Your IP address is \(req.clientIpAddress().stringValue)")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
             }
             .frame(idealWidth: 800, maxWidth: 800, alignment: .topLeading)
             .padding()
