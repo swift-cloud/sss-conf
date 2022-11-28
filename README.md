@@ -1,3 +1,3 @@
 # sss-conf
 
-A description of this package.
+Swift examples for the 2022 Server Side Swift Conference
