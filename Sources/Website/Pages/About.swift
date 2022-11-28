@@ -1,11 +1,8 @@
-import Foundation
-import TokamakStaticHTML
+import ComputeUI
 
 struct AboutPage: View {
 
     @Environment(\.request) var req
-
-    let homeURL = URL(string: "/")!
 
     var body: some View {
         ScrollView {
@@ -16,7 +13,7 @@ struct AboutPage: View {
                 Text("This is everything you would want to know about us")
                     .font(.subheadline)
                     .padding(.bottom, 20)
-                Link("Home", destination: homeURL)
+                Link("Home", destination: .path("/"))
                     .font(.body)
                     .foregroundColor(.blue)
                 Spacer().frame(height: 20)

@@ -1,4 +1,4 @@
-import Compute
+import ComputeUI
 
 let router = Router()
 

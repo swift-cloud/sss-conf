@@ -5,8 +5,17 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/swift-cloud/Compute",
       "state" : {
-        "revision" : "77b8bdea21161cbb5e1d081a6b1ee72c8514bd6a",
-        "version" : "2.2.0"
+        "revision" : "0eb31ee13d0a7594be101d073bd8d4b6dca6190f",
+        "version" : "2.4.0"
+      }
+    },
+    {
+      "identity" : "computeui",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/swift-cloud/ComputeUI",
+      "state" : {
+        "branch" : "main",
+        "revision" : "b79722d0ee110e0db714a6508992007100ee6f61"
       }
     },
     {

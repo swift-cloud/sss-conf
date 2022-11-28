@@ -8,14 +8,14 @@ let package = Package(
         .macOS(.v13)
     ],
     dependencies: [
-        .package(url: "https://github.com/swift-cloud/Compute", from: "2.2.0"),
-        .package(url: "https://github.com/swift-cloud/Planetscale", from: "1.1.0"),
-        .package(url: "https://github.com/TokamakUI/Tokamak", branch: "main")
+        .package(url: "https://github.com/swift-cloud/Compute", from: "2.4.0"),
+        .package(url: "https://github.com/swift-cloud/ComputeUI", branch: "main"),
+        .package(url: "https://github.com/swift-cloud/Planetscale", from: "1.1.0")
     ],
     targets: [
         .executableTarget(name: "Hello", dependencies: ["Compute"]),
         .executableTarget(name: "Database", dependencies: ["Compute", "Planetscale"]),
-        .executableTarget(name: "Website", dependencies: ["Compute", "Planetscale", .product(name: "TokamakStaticHTML", package: "Tokamak")])
+        .executableTarget(name: "Website", dependencies: ["ComputeUI", "Planetscale"])
     ]
 )
 

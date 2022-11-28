@@ -1,10 +1,7 @@
-import Foundation
-import TokamakStaticHTML
+import ComputeUI
 
 struct IndexPage: View {
-
-    let aboutURL = URL(string: "/about")!
-
+    
     var body: some View {
         ScrollView {
             HTMLTitle("Home | Server Side Swift")
@@ -14,7 +11,7 @@ struct IndexPage: View {
                 Text("Welcome to Server Side Swift Conf 2022")
                     .font(.subheadline)
                     .padding(.bottom, 20)
-                Link("About Us", destination: aboutURL)
+                Link("About Us", destination: .path("/about"))
                     .font(.body)
                     .foregroundColor(.blue)
             }
