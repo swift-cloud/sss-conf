@@ -9,11 +9,13 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/swift-cloud/Compute", from: "2.2.0"),
-        .package(url: "https://github.com/swift-cloud/Planetscale", from: "1.1.0")
+        .package(url: "https://github.com/swift-cloud/Planetscale", from: "1.1.0"),
+        .package(url: "https://github.com/TokamakUI/Tokamak", branch: "main")
     ],
     targets: [
         .executableTarget(name: "Hello", dependencies: ["Compute"]),
-        .executableTarget(name: "Database", dependencies: ["Compute", "Planetscale"])
+        .executableTarget(name: "Database", dependencies: ["Compute", "Planetscale"]),
+        .executableTarget(name: "Website", dependencies: ["Compute", "Planetscale", .product(name: "TokamakStaticHTML", package: "Tokamak")])
     ]
 )
 
