@@ -14,8 +14,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/swift-cloud/ComputeUI",
       "state" : {
-        "branch" : "main",
-        "revision" : "dc8ddc3169e2fa1ff2d36c45a2060d73d412daa2"
+        "revision" : "dc8ddc3169e2fa1ff2d36c45a2060d73d412daa2",
+        "version" : "1.0.1"
       }
     },
     {
@@ -59,8 +59,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/swift-cloud/Planetscale",
       "state" : {
-        "branch" : "ab/cache-policy",
-        "revision" : "b3d55da1dfeeece443ac2ab0992773ad37679979"
+        "revision" : "e6d951923964d1466c69d95ec8feeac0141e20d7",
+        "version" : "1.1.0"
       }
     },
     {

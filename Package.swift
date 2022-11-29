@@ -9,8 +9,8 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/swift-cloud/Compute", from: "2.4.0"),
-        .package(url: "https://github.com/swift-cloud/ComputeUI", branch: "main"),
-        .package(url: "https://github.com/swift-cloud/Planetscale", branch: "ab/cache-policy")
+        .package(url: "https://github.com/swift-cloud/ComputeUI", from: "1.0.0"),
+        .package(url: "https://github.com/swift-cloud/Planetscale", from: "1.1.0")
     ],
     targets: [
         .executableTarget(name: "Hello", dependencies: ["Compute"]),
