@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/swift-cloud/Compute",
       "state" : {
-        "revision" : "0eb31ee13d0a7594be101d073bd8d4b6dca6190f",
-        "version" : "2.4.0"
+        "revision" : "c76b389b3d6c958788fbf21241e31107c5697a53",
+        "version" : "2.4.1"
       }
     },
     {
@@ -15,7 +15,7 @@
       "location" : "https://github.com/swift-cloud/ComputeUI",
       "state" : {
         "branch" : "main",
-        "revision" : "61ba8700be0b7651e09f7b6c1afa28797d5d6a63"
+        "revision" : "dc8ddc3169e2fa1ff2d36c45a2060d73d412daa2"
       }
     },
     {
@@ -60,7 +60,7 @@
       "location" : "https://github.com/swift-cloud/Planetscale",
       "state" : {
         "branch" : "ab/cache-policy",
-        "revision" : "8d3a2ab9e14b4a221b4349b1d560594827e44a2b"
+        "revision" : "3e17612ad64e0a984738fb57974be95bbfa1998f"
       }
     },
     {
@@ -86,8 +86,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/TokamakUI/Tokamak",
       "state" : {
-        "branch" : "main",
-        "revision" : "f1cbfcf073e2675566b0e9aa337441357d40d88a"
+        "revision" : "f1cbfcf073e2675566b0e9aa337441357d40d88a",
+        "version" : "0.11.1"
       }
     }
   ],
