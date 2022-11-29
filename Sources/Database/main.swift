@@ -16,7 +16,8 @@ router.get("/") { req, res in
 
 router.get("/execute") { req, res in
     let sql = req.searchParams["sql"] ?? ""
-    let data = try await client.execute(sql)
+    let ttl = req.searchParams["ttl"].flatMap(Int.init) ?? 0
+    let data = try await client.execute(sql, cachePolicy: ttl > 0 ? .ttl(ttl) : .origin)
     try await res.status(.ok).send(data.json())
 }
 
