@@ -15,6 +15,9 @@ try await Router()
         let rows: [Customer] = try await client.execute(sql).decode()
         return CustomerPage(customer: rows[0])
     }
+    .use { _, res in
+        res.upgradeToHTTP3()
+    }
     .listen()
 
 func buildPlanetscaleClient() throws -> PlanetscaleClient {
