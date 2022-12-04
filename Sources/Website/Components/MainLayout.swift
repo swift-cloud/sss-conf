@@ -1,19 +1,27 @@
 import ComputeUI
+import TokamakCore
 
-struct IndexPage: View {
-    
+struct MainLayout<Content: View>: View {
+
+    var title: String
+
+    var subtitle: String
+
+    @ViewBuilder
+    var content: () -> Content
+
     var body: some View {
         ScrollView {
-            HTMLTitle("Home | Server Side Swift")
+            HTMLTitle("\(title) | Server Side Swift")
             VStack(alignment: .leading) {
-                Text("Hello, World")
+                Text(title)
                     .font(.largeTitle)
-                Text("Welcome to Server Side Swift Conf 2022")
+
+                Text(subtitle)
                     .font(.subheadline)
                     .padding(.bottom, 20)
-                Link("About Us", destination: .path("/about"))
-                    .font(.body)
-                    .foregroundColor(.blue)
+
+                content()
             }
             .frame(idealWidth: 800, maxWidth: 800, alignment: .topLeading)
             .padding()
