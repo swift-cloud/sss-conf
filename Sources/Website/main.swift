@@ -5,7 +5,7 @@ let client = try buildPlanetscaleClient()
 
 try await Router()
     .get("/") { req, _ in
-        let sql = "select * from customers limit 25"
+        let sql = "select * from customers limit 10"
         let rows: [Customer] = try await client.execute(sql).decode()
         return IndexPage(customers: rows)
     }
