@@ -8,7 +8,7 @@ let package = Package(
         .macOS(.v13)
     ],
     dependencies: [
-        .package(url: "https://github.com/swift-cloud/Compute", from: "2.4.0"),
+        .package(url: "https://github.com/swift-cloud/Compute", from: "2.5.0"),
         .package(url: "https://github.com/swift-cloud/ComputeUI", from: "1.0.0"),
         .package(url: "https://github.com/swift-cloud/Planetscale", from: "1.1.0")
     ],
