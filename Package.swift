@@ -10,7 +10,7 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/swift-cloud/Compute", from: "2.6.0"),
         .package(url: "https://github.com/swift-cloud/ComputeUI", from: "1.0.0"),
-        .package(url: "https://github.com/swift-cloud/PlanetScale", from: "1.2.0")
+        .package(url: "https://github.com/swift-cloud/PlanetScale", from: "1.2.1")
     ],
     targets: [
         .executableTarget(name: "Hello", dependencies: ["Compute"]),

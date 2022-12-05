@@ -59,8 +59,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/swift-cloud/Planetscale",
       "state" : {
-        "revision" : "12764299b0e80ecd479d5051a2d595c8fe548136",
-        "version" : "1.2.0"
+        "revision" : "a395ab40a963c96fd2702e5a43040395739b301b",
+        "version" : "1.2.1"
       }
     },
     {
