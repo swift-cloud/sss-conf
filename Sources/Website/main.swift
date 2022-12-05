@@ -1,7 +1,7 @@
 import ComputeUI
-import Planetscale
+import PlanetScale
 
-let client = try buildPlanetscaleClient()
+let client = try buildPlanetScaleClient()
 
 try await Router()
     .get("/") { req, _ in
@@ -20,9 +20,9 @@ try await Router()
     }
     .listen()
 
-func buildPlanetscaleClient() throws -> PlanetscaleClient {
+func buildPlanetScaleClient() throws -> PlanetScaleClient {
     let dict = try Dictionary(name: "env")
     let username = dict["DB_USERNAME"]!
     let password = dict["DB_PASSWORD"]!
-    return PlanetscaleClient(username: username, password: password)
+    return PlanetScaleClient(username: username, password: password)
 }
