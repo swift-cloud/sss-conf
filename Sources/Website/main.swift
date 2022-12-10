@@ -5,7 +5,8 @@ let client = try buildPlanetScaleClient()
 
 try await Router()
     .get("/") { req, _ in
-        let sql = "select * from customers limit 10"
+        let limit = req.searchParams["limit", default: "10"]
+        let sql = "select * from customers limit \(limit)"
         let rows: [Customer] = try await client.execute(sql).decode()
         return IndexPage(customers: rows)
     }
@@ -21,7 +22,7 @@ try await Router()
     .listen()
 
 func buildPlanetScaleClient() throws -> PlanetScaleClient {
-    let dict = try Dictionary(name: "env")
+    let dict = try ConfigStore(name: "env")
     let username = dict["DB_USERNAME"]!
     let password = dict["DB_PASSWORD"]!
     return PlanetScaleClient(username: username, password: password)

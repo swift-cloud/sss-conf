@@ -30,7 +30,7 @@ router.get("/token") { req, res in
 }
 
 func buildPlanetScaleClient() throws -> PlanetScaleClient {
-    let dict = try Dictionary(name: "env")
+    let dict = try ConfigStore(name: "env")
     let username = dict["DB_USERNAME"]!
     let password = dict["DB_PASSWORD"]!
     return PlanetScaleClient(username: username, password: password)
